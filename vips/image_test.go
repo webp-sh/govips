@@ -3,7 +3,6 @@ package vips
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"math"
 	"os"
 	"runtime"
@@ -23,7 +22,7 @@ func TestMain(m *testing.M) {
 func TestImageRef_WebP(t *testing.T) {
 	Startup(nil)
 
-	srcBytes, err := ioutil.ReadFile(resources + "webp+alpha.webp")
+	srcBytes, err := os.ReadFile(resources + "webp+alpha.webp")
 	require.NoError(t, err)
 
 	src := bytes.NewReader(srcBytes)
@@ -38,7 +37,7 @@ func TestImageRef_WebP(t *testing.T) {
 func TestImageRef_WebP__ReducedEffort(t *testing.T) {
 	Startup(nil)
 
-	srcBytes, err := ioutil.ReadFile(resources + "webp+alpha.webp")
+	srcBytes, err := os.ReadFile(resources + "webp+alpha.webp")
 	require.NoError(t, err)
 
 	src := bytes.NewReader(srcBytes)
@@ -55,7 +54,7 @@ func TestImageRef_WebP__ReducedEffort(t *testing.T) {
 func TestImageRef_WebP__NearLossless(t *testing.T) {
 	Startup(nil)
 
-	srcBytes, err := ioutil.ReadFile(resources + "webp+alpha.webp")
+	srcBytes, err := os.ReadFile(resources + "webp+alpha.webp")
 	require.NoError(t, err)
 
 	src := bytes.NewReader(srcBytes)
@@ -72,7 +71,7 @@ func TestImageRef_WebP__NearLossless(t *testing.T) {
 func TestImageRef_PNG(t *testing.T) {
 	Startup(nil)
 
-	srcBytes, err := ioutil.ReadFile(resources + "png-24bit.png")
+	srcBytes, err := os.ReadFile(resources + "png-24bit.png")
 	require.NoError(t, err)
 
 	src := bytes.NewReader(srcBytes)
@@ -90,7 +89,7 @@ func TestImageRef_PNG(t *testing.T) {
 func TestImageRef_HEIF(t *testing.T) {
 	Startup(nil)
 
-	raw, err := ioutil.ReadFile(resources + "heic-24bit-exif.heic")
+	raw, err := os.ReadFile(resources + "heic-24bit-exif.heic")
 	require.NoError(t, err)
 
 	img, err := NewImageFromBuffer(raw)
@@ -105,7 +104,7 @@ func TestImageRef_HEIF(t *testing.T) {
 func TestImageRef_HEIF_MIF1(t *testing.T) {
 	Startup(nil)
 
-	raw, err := ioutil.ReadFile(resources + "heic-24bit.heic")
+	raw, err := os.ReadFile(resources + "heic-24bit.heic")
 	require.NoError(t, err)
 
 	img, err := NewImageFromBuffer(raw)
@@ -120,7 +119,7 @@ func TestImageRef_HEIF_MIF1(t *testing.T) {
 func TestImageRef_HEIF_ftypmsf1(t *testing.T) {
 	Startup(nil)
 
-	raw, err := ioutil.ReadFile(resources + "heic-ftypmsf1.heic")
+	raw, err := os.ReadFile(resources + "heic-ftypmsf1.heic")
 	require.NoError(t, err)
 
 	img, err := NewImageFromBuffer(raw)
@@ -135,7 +134,7 @@ func TestImageRef_HEIF_ftypmsf1(t *testing.T) {
 func TestImageRef_BMP__ImplicitConversionToPNG(t *testing.T) {
 	Startup(nil)
 
-	raw, err := ioutil.ReadFile(resources + "bmp.bmp")
+	raw, err := os.ReadFile(resources + "bmp.bmp")
 	require.NoError(t, err)
 
 	img, err := NewImageFromBuffer(raw)
@@ -152,7 +151,7 @@ func TestImageRef_BMP__ImplicitConversionToPNG(t *testing.T) {
 func TestImageRef_SVG(t *testing.T) {
 	Startup(nil)
 
-	raw, err := ioutil.ReadFile(resources + "svg.svg")
+	raw, err := os.ReadFile(resources + "svg.svg")
 	require.NoError(t, err)
 
 	img, err := NewImageFromBuffer(raw)
@@ -165,7 +164,7 @@ func TestImageRef_SVG(t *testing.T) {
 func TestImageRef_SVG_1(t *testing.T) {
 	Startup(nil)
 
-	raw, err := ioutil.ReadFile(resources + "svg_1.svg")
+	raw, err := os.ReadFile(resources + "svg_1.svg")
 	require.NoError(t, err)
 
 	img, err := NewImageFromBuffer(raw)
@@ -178,7 +177,7 @@ func TestImageRef_SVG_1(t *testing.T) {
 func TestImageRef_SVG_2(t *testing.T) {
 	Startup(nil)
 
-	raw, err := ioutil.ReadFile(resources + "svg_2.svg")
+	raw, err := os.ReadFile(resources + "svg_2.svg")
 	require.NoError(t, err)
 
 	img, err := NewImageFromBuffer(raw)
@@ -191,7 +190,7 @@ func TestImageRef_SVG_2(t *testing.T) {
 func TestImageRef_OverSizedMetadata(t *testing.T) {
 	Startup(nil)
 
-	srcBytes, err := ioutil.ReadFile(resources + "png-bad-metadata.png")
+	srcBytes, err := os.ReadFile(resources + "png-bad-metadata.png")
 	require.NoError(t, err)
 
 	src := bytes.NewReader(srcBytes)
@@ -749,7 +748,7 @@ func TestCopy(t *testing.T) {
 func BenchmarkExportImage(b *testing.B) {
 	Startup(nil)
 
-	fileBuf, err := ioutil.ReadFile(resources + "heic-24bit.heic")
+	fileBuf, err := os.ReadFile(resources + "heic-24bit.heic")
 	require.NoError(b, err)
 
 	img, err := NewImageFromBuffer(fileBuf)
@@ -767,7 +766,7 @@ func BenchmarkExportImage(b *testing.B) {
 func BenchmarkOpenBMPImage(b *testing.B) {
 	Startup(nil)
 
-	fileBuf, err := ioutil.ReadFile(resources + "large.bmp")
+	fileBuf, err := os.ReadFile(resources + "large.bmp")
 	require.NoError(b, err)
 
 	b.SetParallelism(100)
@@ -1057,7 +1056,7 @@ func TestImageRef_Linear_Fails(t *testing.T) {
 func TestImageRef_AVIF(t *testing.T) {
 	Startup(nil)
 
-	raw, err := ioutil.ReadFile(resources + "avif-8bit.avif")
+	raw, err := os.ReadFile(resources + "avif-8bit.avif")
 	require.NoError(t, err)
 
 	img, err := NewImageFromBuffer(raw)
@@ -1075,7 +1074,7 @@ func TestImageRef_JP2K(t *testing.T) {
 	}
 	Startup(nil)
 
-	raw, err := ioutil.ReadFile(resources + "jp2k-orientation-6.jp2")
+	raw, err := os.ReadFile(resources + "jp2k-orientation-6.jp2")
 	require.NoError(t, err)
 
 	img, err := NewImageFromBuffer(raw)
@@ -1091,7 +1090,7 @@ func TestImageRef_JP2K(t *testing.T) {
 func TestImageRef_CorruptedJPEG(t *testing.T) {
 	Startup(nil)
 
-	raw, err := ioutil.ReadFile(resources + "jpg-corruption.jpg")
+	raw, err := os.ReadFile(resources + "jpg-corruption.jpg")
 	require.NoError(t, err)
 
 	img, err := NewImageFromBuffer(raw)
@@ -1167,6 +1166,39 @@ func TestImageRef_HistogramEntropy(t *testing.T) {
 	e, err := image.HistogramEntropy()
 	require.NoError(t, err)
 	require.True(t, e > 0)
+}
+
+func TestImageRef_SetPages(t *testing.T) {
+	Startup(nil)
+
+	image, err := NewImageFromFile(resources + "gif-animated.gif")
+	require.NoError(t, err)
+	require.Equal(t, 8, image.Pages())
+
+	err = image.SetPages(3)
+	require.NoError(t, err)
+	require.Equal(t, 3, image.Pages())
+}
+
+func TestImageRef_SetGamma(t *testing.T) {
+	Startup(nil)
+
+	image, err := NewImageFromFile(resources + "png-24bit.png")
+	require.NoError(t, err)
+
+	err = image.Gamma(1.0 / 2.4)
+	require.NoError(t, err)
+}
+
+func Test_NewImageFromFile(t *testing.T) {
+	Startup(nil)
+
+	image, err := NewImageFromFile(resources + "PDF-2.0-with-offset-start.pdf")
+	require.NoError(t, err)
+
+	assert.Equal(t, ImageTypePDF, image.originalFormat)
+	assert.Equal(t, ImageTypePDF, image.format)
+	assert.Equal(t, 1, image.Pages())
 }
 
 // TODO unit tests to cover:

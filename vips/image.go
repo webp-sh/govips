@@ -8,8 +8,11 @@ import (
 	"errors"
 	"fmt"
 	"image"
+	_ "image/gif"
+	_ "image/jpeg"
+	_ "image/png"
 	"io"
-	"io/ioutil"
+	"os"
 	"runtime"
 	"strconv"
 	"strings"
@@ -415,7 +418,7 @@ func NewJxlExportParams() *JxlExportParams {
 
 // NewImageFromReader loads an ImageRef from the given reader
 func NewImageFromReader(r io.Reader) (*ImageRef, error) {
-	buf, err := ioutil.ReadAll(r)
+	buf, err := io.ReadAll(r)
 	if err != nil {
 		return nil, err
 	}
@@ -430,7 +433,7 @@ func NewImageFromFile(file string) (*ImageRef, error) {
 
 // LoadImageFromFile loads an image from file and creates a new ImageRef
 func LoadImageFromFile(file string, params *ImportParams) (*ImageRef, error) {
-	buf, err := ioutil.ReadFile(file)
+	buf, err := os.ReadFile(file)
 	if err != nil {
 		return nil, err
 	}
@@ -766,7 +769,7 @@ func (r *ImageRef) SetPages(pages int) error {
 		return err
 	}
 
-	vipsSetImageNPages(r.image, pages)
+	vipsSetImageNPages(out, pages)
 
 	r.setImage(out)
 	return nil
@@ -817,7 +820,7 @@ func (r *ImageRef) SetPageDelay(delay []int) error {
 }
 
 // Export creates a byte array of the image for use.
-// The function returns a byte array that can be written to a file e.g. via ioutil.WriteFile().
+// The function returns a byte array that can be written to a file e.g. via os.WriteFile().
 // N.B. govips does not currently have built-in support for directly exporting to a file.
 // The function also returns a copy of the image metadata as well as an error.
 // Deprecated: Use ExportNative or format-specific Export methods
@@ -1304,6 +1307,17 @@ func (r *ImageRef) Linear1(a, b float64) error {
 	return nil
 }
 
+// Adjusts the image's gamma value.
+// See https://www.libvips.org/API/current/libvips-conversion.html#vips-gamma
+func (r *ImageRef) Gamma(gamma float64) error {
+	out, err := vipsGamma(r.image, gamma)
+	if err != nil {
+		return err
+	}
+	r.setImage(out)
+	return nil
+}
+
 // GetRotationAngleFromExif returns the angle which the image is currently rotated in.
 // First returned value is the angle and second is a boolean indicating whether image is flipped.
 // This is based on the EXIF orientation tag standard.
@@ -1550,6 +1564,16 @@ func (r *ImageRef) GaussianBlur(sigmas ...float64) error {
 // m2: slope for jaggy areas
 func (r *ImageRef) Sharpen(sigma float64, x1 float64, m2 float64) error {
 	out, err := vipsSharpen(r.image, sigma, x1, m2)
+	if err != nil {
+		return err
+	}
+	r.setImage(out)
+	return nil
+}
+
+// Apply Sobel edge detector to the image.
+func (r *ImageRef) Sobel() error {
+	out, err := vipsSobel(r.image)
 	if err != nil {
 		return err
 	}

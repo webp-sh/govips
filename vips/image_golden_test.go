@@ -5,7 +5,7 @@ import (
 	"image"
 	jpeg2 "image/jpeg"
 	"image/png"
-	"io/ioutil"
+	"os"
 	"os/exec"
 	"runtime"
 	"strings"
@@ -434,6 +434,12 @@ func TestImage_Sharpen_8bit_Alpha(t *testing.T) {
 		m2 := 1.0
 
 		return img.Sharpen(sigma, x1, m2)
+	}, nil, nil)
+}
+
+func TestImage_Sobel(t *testing.T) {
+	goldenTest(t, resources+"png-8bit+alpha.png", func(img *ImageRef) error {
+		return img.Sobel()
 	}, nil, nil)
 }
 
@@ -948,6 +954,14 @@ func TestImage_Pixelate(t *testing.T) {
 		nil, nil)
 }
 
+func TestPDF_WithOffsetStart(t *testing.T) {
+	goldenTest(t, resources+"PDF-2.0-with-offset-start.pdf",
+		nil, func(img *ImageRef) {
+			assert.Equal(t, 612, img.Width())
+			assert.Equal(t, 396, img.Height())
+		}, nil)
+}
+
 func testWebpOptimizeIccProfile(t *testing.T, exportParams *WebpExportParams) []byte {
 	return goldenTest(t, resources+"has-icc-profile.png",
 		func(img *ImageRef) error {
@@ -1072,7 +1086,7 @@ func goldenCreateTest(
 
 	assertGoldenMatch(t, path, buf, metadata.Format)
 
-	buf2, err := ioutil.ReadFile(path)
+	buf2, err := os.ReadFile(path)
 	require.NoError(t, err)
 
 	img2, err := createFromBuffer(buf2)
@@ -1131,12 +1145,12 @@ func assertGoldenMatch(t *testing.T, file string, buf []byte, format ImageType) 
 	ext := format.FileExt()
 	goldenFile := prefix + "-" + getEnvironment() + ".golden" + ext
 
-	golden, _ := ioutil.ReadFile(goldenFile)
+	golden, _ := os.ReadFile(goldenFile)
 	if golden != nil {
 		sameAsGolden := assert.True(t, bytes.Equal(buf, golden), "Actual image (size=%d) didn't match expected golden file=%s (size=%d)", len(buf), goldenFile, len(golden))
 		if !sameAsGolden {
 			failed := prefix + "-" + getEnvironment() + ".failed" + ext
-			err := ioutil.WriteFile(failed, buf, 0666)
+			err := os.WriteFile(failed, buf, 0666)
 			if err != nil {
 				panic(err)
 			}
@@ -1145,7 +1159,7 @@ func assertGoldenMatch(t *testing.T, file string, buf []byte, format ImageType) 
 	}
 
 	t.Log("writing golden file: " + goldenFile)
-	err := ioutil.WriteFile(goldenFile, buf, 0644)
+	err := os.WriteFile(goldenFile, buf, 0644)
 	assert.NoError(t, err)
 }
 
