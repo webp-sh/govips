@@ -1708,7 +1708,7 @@ func (r *ImageRef) Stats() error {
 	return nil
 }
 
-// HistogramFind find the histogram the image.
+// HistogramFind find the histogram of the image.
 // Find the histogram for all bands (producing a one-band histogram).
 // char and uchar images are cast to uchar before histogramming, all other image types are cast to ushort.
 func (r *ImageRef) HistogramFind() error {
@@ -1718,6 +1718,23 @@ func (r *ImageRef) HistogramFind() error {
 	}
 	r.setImage(out)
 	return nil
+}
+
+func (r *ImageRef) HistogramFindNdim() error {
+	out, err := vipsHistFindNdim(r.image)
+	if err != nil {
+		return err
+	}
+	r.setImage(out)
+	return nil
+}
+
+func (r *ImageRef) MaxPos() (float64, error) {
+	return vipsMax(r.image)
+}
+
+func (r *ImageRef) MinPos() (float64, error) {
+	return vipsMin(r.image)
 }
 
 // HistogramCumulative form cumulative histogram.
