@@ -66,8 +66,8 @@ int hist_find(VipsImage *in, VipsImage **out) {
   return vips_hist_find(in, out, NULL);
 }
 
-int hist_find_ndim(VipsImage *in, VipsImage **out) {
-  return vips_hist_find_ndim(in, out, NULL);
+int hist_find_ndim(VipsImage *in, VipsImage **out, int bins) {
+  return vips_hist_find_ndim(in, out, "bins", bins, NULL);
 }
 
 int hist_cum(VipsImage *in, VipsImage **out) {

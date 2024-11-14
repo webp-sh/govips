@@ -140,11 +140,11 @@ func vipsHistFind(in *C.VipsImage) (*C.VipsImage, error) {
 }
 
 // https://www.libvips.org/API/current/libvips-arithmetic.html#vips-hist-find-ndim
-func vipsHistFindNdim(in *C.VipsImage) (*C.VipsImage, error) {
+func vipsHistFindNdim(in *C.VipsImage, bins int) (*C.VipsImage, error) {
 	incOpCounter("histFindNdim")
 	var out *C.VipsImage
 
-	if err := C.hist_find_ndim(in, &out); err != 0 {
+	if err := C.hist_find_ndim(in, &out, C.int(bins)); err != 0 {
 		return nil, handleImageError(out)
 	}
 

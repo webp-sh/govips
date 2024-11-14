@@ -17,7 +17,7 @@ int stats(VipsImage *in, VipsImage **out);
 int maxpos(VipsImage *in, double *out);
 int minpos(VipsImage *in, double *out);
 int hist_find(VipsImage *in, VipsImage **out);
-int hist_find_ndim(VipsImage *in, VipsImage **out);
+int hist_find_ndim(VipsImage *in, VipsImage **out, int bins);
 int hist_cum(VipsImage *in, VipsImage **out);
 int hist_norm(VipsImage *in, VipsImage **out);
 int hist_entropy(VipsImage *in, double *out);

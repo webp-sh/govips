@@ -1720,8 +1720,9 @@ func (r *ImageRef) HistogramFind() error {
 	return nil
 }
 
-func (r *ImageRef) HistogramFindNdim() error {
-	out, err := vipsHistFindNdim(r.image)
+// Make a one, two or three dimensional histogram of a 1, 2 or 3 band image. Divide each axis into `bins` bins .. ie. output is 1 x bins, bins x bins, or bins x bins x bins bands. bins defaults to 10.
+func (r *ImageRef) HistogramFindNdim(bins int) error {
+	out, err := vipsHistFindNdim(r.image, bins)
 	if err != nil {
 		return err
 	}
