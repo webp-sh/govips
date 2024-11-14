@@ -28,6 +28,13 @@ int average(VipsImage *in, double *out) {
 	return vips_avg(in, out, NULL);
 }
 
+int maxpos(VipsImage *in, double *out, int *x, int *y) {
+  return vips_max(in, out, "x", x, "y", y, NULL);
+}
+
+int minpos(VipsImage *in, double *out, int *x, int *y) {
+  return vips_min(in, out, "x", x, "y", y, NULL);
+}
 int find_trim(VipsImage *in, int *left, int *top, int *width, int *height,
               double threshold, double r, double g, double b) {
 
@@ -56,6 +63,10 @@ int stats(VipsImage *in, VipsImage **out) {
 
 int hist_find(VipsImage *in, VipsImage **out) {
   return vips_hist_find(in, out, NULL);
+}
+
+int hist_find_ndim(VipsImage *in, VipsImage **out, int bins) {
+  return vips_hist_find_ndim(in, out, "bins", bins, NULL);
 }
 
 int hist_cum(VipsImage *in, VipsImage **out) {

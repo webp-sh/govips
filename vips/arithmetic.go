@@ -139,6 +139,44 @@ func vipsHistFind(in *C.VipsImage) (*C.VipsImage, error) {
 	return out, nil
 }
 
+// https://www.libvips.org/API/current/libvips-arithmetic.html#vips-hist-find-ndim
+func vipsHistFindNdim(in *C.VipsImage, bins int) (*C.VipsImage, error) {
+	incOpCounter("histFindNdim")
+	var out *C.VipsImage
+
+	if err := C.hist_find_ndim(in, &out, C.int(bins)); err != 0 {
+		return nil, handleImageError(out)
+	}
+
+	return out, nil
+}
+
+// https://www.libvips.org/API/current/libvips-arithmetic.html#vips-max
+func vipsMax(in *C.VipsImage) (int, int, error) {
+	incOpCounter("max")
+	var out C.double
+	var x, y C.int
+
+	if err := C.maxpos(in, &out, &x, &y); err != 0 {
+		return -1, -1, handleVipsError()
+	}
+
+	return int(x), int(y), nil
+}
+
+// https://www.libvips.org/API/current/libvips-arithmetic.html#vips-min
+func vipsMin(in *C.VipsImage) (int, int, error) {
+	incOpCounter("min")
+	var out C.double
+	var x, y C.int
+
+	if err := C.maxpos(in, &out, &x, &y); err != 0 {
+		return -1, -1, handleVipsError()
+	}
+
+	return int(x), int(y), nil
+}
+
 // https://www.libvips.org/API/current/libvips-histogram.html#vips-hist-norm
 func vipsHistNorm(in *C.VipsImage) (*C.VipsImage, error) {
 	incOpCounter("histNorm")

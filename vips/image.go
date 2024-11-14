@@ -1708,7 +1708,7 @@ func (r *ImageRef) Stats() error {
 	return nil
 }
 
-// HistogramFind find the histogram the image.
+// HistogramFind find the histogram of the image.
 // Find the histogram for all bands (producing a one-band histogram).
 // char and uchar images are cast to uchar before histogramming, all other image types are cast to ushort.
 func (r *ImageRef) HistogramFind() error {
@@ -1718,6 +1718,26 @@ func (r *ImageRef) HistogramFind() error {
 	}
 	r.setImage(out)
 	return nil
+}
+
+// Make a one, two or three dimensional histogram of a 1, 2 or 3 band image. Divide each axis into `bins` bins .. ie. output is 1 x bins, bins x bins, or bins x bins x bins bands. bins defaults to 10.
+func (r *ImageRef) HistogramFindNdim(bins int) error {
+	out, err := vipsHistFindNdim(r.image, bins)
+	if err != nil {
+		return err
+	}
+	r.setImage(out)
+	return nil
+}
+
+// This operation finds the maximum value in an image.
+func (r *ImageRef) MaxPos() (x, y int, err error) {
+	return vipsMax(r.image)
+}
+
+// This operation finds the maximum value in an image.
+func (r *ImageRef) MinPos() (x, y int, err error) {
+	return vipsMin(r.image)
 }
 
 // HistogramCumulative form cumulative histogram.
