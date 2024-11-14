@@ -1730,11 +1730,13 @@ func (r *ImageRef) HistogramFindNdim(bins int) error {
 	return nil
 }
 
-func (r *ImageRef) MaxPos() (float64, error) {
+// This operation finds the maximum value in an image.
+func (r *ImageRef) MaxPos() (x, y int, err error) {
 	return vipsMax(r.image)
 }
 
-func (r *ImageRef) MinPos() (float64, error) {
+// This operation finds the maximum value in an image.
+func (r *ImageRef) MinPos() (x, y int, err error) {
 	return vipsMin(r.image)
 }
 

@@ -28,14 +28,13 @@ int average(VipsImage *in, double *out) {
 	return vips_avg(in, out, NULL);
 }
 
-int maxpos(VipsImage *in, double *out) {
-  return vips_max(in, out, NULL);
+int maxpos(VipsImage *in, double *out, int *x, int *y) {
+  return vips_max(in, out, "x", x, "y", y, NULL);
 }
 
-int minpos(VipsImage *in, double *out) {
-  return vips_min(in, out, NULL);
+int minpos(VipsImage *in, double *out, int *x, int *y) {
+  return vips_min(in, out, "x", x, "y", y, NULL);
 }
-
 int find_trim(VipsImage *in, int *left, int *top, int *width, int *height,
               double threshold, double r, double g, double b) {
 

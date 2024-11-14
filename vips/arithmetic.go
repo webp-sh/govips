@@ -152,27 +152,29 @@ func vipsHistFindNdim(in *C.VipsImage, bins int) (*C.VipsImage, error) {
 }
 
 // https://www.libvips.org/API/current/libvips-arithmetic.html#vips-max
-func vipsMax(in *C.VipsImage) (float64, error) {
+func vipsMax(in *C.VipsImage) (int, int, error) {
 	incOpCounter("max")
 	var out C.double
+	var x, y C.int
 
-	if err := C.maxpos(in, &out); err != 0 {
-		return 0, handleVipsError()
+	if err := C.maxpos(in, &out, &x, &y); err != 0 {
+		return -1, -1, handleVipsError()
 	}
 
-	return float64(out), nil
+	return int(x), int(y), nil
 }
 
 // https://www.libvips.org/API/current/libvips-arithmetic.html#vips-min
-func vipsMin(in *C.VipsImage) (float64, error) {
+func vipsMin(in *C.VipsImage) (int, int, error) {
 	incOpCounter("min")
 	var out C.double
+	var x, y C.int
 
-	if err := C.minpos(in, &out); err != 0 {
-		return 0, handleVipsError()
+	if err := C.maxpos(in, &out, &x, &y); err != 0 {
+		return -1, -1, handleVipsError()
 	}
 
-	return float64(out), nil
+	return int(x), int(y), nil
 }
 
 // https://www.libvips.org/API/current/libvips-histogram.html#vips-hist-norm
